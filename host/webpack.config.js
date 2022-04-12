@@ -317,6 +317,10 @@ module.exports = {
             require('./package.json').dependencies['react-native-reanimated'],
         },
       },
+      remotes: {
+        app1: 'app1@http://localhost:9000/app1.container.bundle',
+        app2: 'app2@http://localhost:9001/app2.container.bundle',
+      }
     }),
   ],
 };

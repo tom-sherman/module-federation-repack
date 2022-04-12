@@ -53,9 +53,9 @@ async function loadComponent(scope, module) {
   return exports;
 }
 
-const App1 = React.lazy(() => loadComponent('app1', './App.js'));
+const App1 = React.lazy(() => import('app1/App'));
 
-const App2 = React.lazy(() => loadComponent('app2', './App.js'));
+const App2 = React.lazy(() => import('app2/App'));
 
 function App1Wrapper() {
   return (
