@@ -317,6 +317,25 @@ module.exports = {
             require('./package.json').dependencies['react-native-reanimated'],
         },
       },
+      remotes: {
+        app1: `promise (${(async function () {
+            console.log('Hello????')
+            const { ChunkManager } = import('@callstack/repack/client');
+            // Initializes the share scope. This fills it with known provided modules from this build and all remotes
+            await __webpack_init_sharing__('default');
+            // Download and execute container
+            await ChunkManager.loadChunk('app1', 'main');
+
+            const container = self['app1'];
+
+            // Initialize the container, it may provide shared modules
+            await container.init(__webpack_share_scopes__.default);
+            const factory = await container.get('App');
+            const exports = factory();
+            return exports;
+        }).toString()})()`,
+        // app2: 'app2@http://localhost:9001/app2.container.bundle',
+      }
     }),
   ],
 };

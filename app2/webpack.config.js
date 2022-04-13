@@ -302,12 +302,12 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "app2",
       filename: `app2.container.bundle`,
-      library: {
-        name: 'app2',
-        type: 'self',
-      },
+      // library: {
+      //   name: 'app2',
+      //   type: 'self',
+      // },
       exposes: {
-        "./App.js": "./src/App.js"
+        "./App": "./src/App.js"
       },
       shared: {
         react: {
