@@ -324,6 +324,17 @@ module.exports = {
           eager: STANDALONE,
           requiredVersion: '^2.3.1',
         },
+        'react-native-reanimated': {
+          singleton: true,
+          eager: STANDALONE,
+          requiredVersion: '^2.3.1',
+        },
+        '@callstack/repack/client': {
+          singleton: true,
+          eager: true,
+          requiredVersion:
+            require('./package.json').dependencies['@callstack/repack'],
+        }
       },
     }),
   ],

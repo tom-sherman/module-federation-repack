@@ -307,7 +307,8 @@ module.exports = {
         type: 'self',
       },
       exposes: {
-        "./App.js": "./src/App.js"
+        "./App.js": "./src/App.js",
+        "./FederatedText.js": './src/FederatedText.js',
       },
       shared: {
         react: {
