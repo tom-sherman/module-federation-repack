@@ -300,6 +300,7 @@ module.exports = {
     }),
 
     new ModuleFederationPlugin({
+      // Needs the version included
       name: 'app1',
       filename: `app1.container.bundle`,
       library: {
@@ -318,11 +319,6 @@ module.exports = {
           singleton: true,
           eager: STANDALONE, // to be figured out
           requiredVersion: '^0.65.0',
-        },
-        'react-native-reanimated': {
-          singleton: true,
-          eager: STANDALONE,
-          requiredVersion: '^2.3.1',
         },
         'react-native-reanimated': {
           singleton: true,

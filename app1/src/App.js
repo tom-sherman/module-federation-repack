@@ -77,7 +77,7 @@ export default function App() {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}
         >
-          <FederatedText style={{color: 'white'}}>Hello</FederatedText>
+          <FederatedText style={{color: 'black'}}>Hello</FederatedText>
           <Section title="App 1">
             This screen comes from <Text style={styles.highlight}>app1</Text>{' '}
             container.

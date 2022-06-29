@@ -4,44 +4,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ChunkManager } from '@callstack/repack/client';
 import { ReanimatedComponent } from './ReanimatedComponent';
+// import App1 from 'app1/App.js';
+// console.log(App1);
 
-ChunkManager.configure({
-  forceRemoteChunkResolution: true,
-  resolveRemoteChunk: async (chunkId, parentId) => {
-    let url;
-
-    switch (parentId) {
-      case 'app1':
-        url = `http://localhost:9000/${chunkId}.chunk.bundle`;
-        break;
-      case 'app2':
-        url = `http://localhost:9001/${chunkId}.chunk.bundle`;
-        break;
-      case 'main':
-      default:
-        url =
-          {
-            // containers
-            app1: 'http://localhost:9000/app1.container.bundle',
-            app2: 'http://localhost:9001/app2.container.bundle',
-          }[chunkId] ?? `http://localhost:8081/${chunkId}.chunk.bundle`;
-        break;
-    }
-
-    return {
-      url,
-      query: {
-        platform: Platform.OS,
-      },
-      excludeExtension: true,
-    };
-  },
-});
+console.log('self.app2', self.app2, self.app1);
+import('app1/App.js').then(mod => console.log('dynamic', mod));
 
 async function loadComponent(scope, module) {
   // Initializes the share scope. This fills it with known provided modules from this build and all remotes
   await __webpack_init_sharing__('default');
   // Download and execute container
+  // Query Reg here to resolve the semver range to a specific version and get a unique scope for that version
   await ChunkManager.loadChunk(scope, 'main');
 
   const container = self[scope];
@@ -53,19 +26,17 @@ async function loadComponent(scope, module) {
   return exports;
 }
 
-const App1 = React.lazy(() => loadComponent('app1', './App.js'));
-
 const App2 = React.lazy(() => loadComponent('app2', './App.js'));
 
-function App1Wrapper() {
-  return (
-    <React.Suspense
-      fallback={<Text style={{ textAlign: 'center' }}>Loading...</Text>}
-    >
-      <App1 />
-    </React.Suspense>
-  );
-}
+// function App1Wrapper() {
+//   return (
+//     <React.Suspense
+//       fallback={<Text style={{ textAlign: 'center' }}>Loading...</Text>}
+//     >
+//       <App1 />
+//     </React.Suspense>
+//   );
+// }
 
 function App2Wrapper() {
   return (
@@ -79,12 +50,12 @@ function App2Wrapper() {
 
 const Tab = createBottomTabNavigator();
 
-export function Root() {
+export default function Root() {
   return (
     <NavigationContainer>
       <ReanimatedComponent backgroundColor="red" />
       <Tab.Navigator initialRouteName="App1">
-        <Tab.Screen name="App1" component={App1Wrapper} />
+        {/* <Tab.Screen name="App1" component={App1Wrapper} /> */}
         <Tab.Screen name="App2" component={App2Wrapper} />
       </Tab.Navigator>
     </NavigationContainer>

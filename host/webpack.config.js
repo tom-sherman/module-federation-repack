@@ -299,29 +299,50 @@ module.exports = {
 
     new ModuleFederationPlugin({
       name: 'host',
+      library: {
+        name: 'host',
+        type: 'self'
+      },
+      remoteType: 'self',
+      remotes: {
+        'app1': `promise new Promise(res => {
+          // __repack__.loadChunk('theChunkIdHere')
+          console.log('__repack__.loadChunk', __repack__.loadChunk)
+          console.log('share scope in pnp',self.__webpack_share_scopes__)
+          res(self.app1)
+        })`,
+        'app2': 'app2',
+      },
+      exposes: {
+        "./even": "is-even"
+      },
       shared: {
-        react: {
+        "is-even": {
           singleton: true,
-          eager: true,
+          eager: true
         },
-        'react-native': {
-          singleton: true,
-          eager: true,
-          requiredVersion:
-            require('./package.json').dependencies['react-native'],
-        },
-        'react-native-reanimated': {
-          singleton: true,
-          eager: true,
-          requiredVersion:
-            require('./package.json').dependencies['react-native-reanimated'],
-        },
-        '@callstack/repack/client': {
-          singleton: true,
-          eager: true,
-          requiredVersion:
-            require('./package.json').dependencies['@callstack/repack'],
-        }
+        // react: {
+        //   singleton: true,
+        //   eager: true,
+        // },
+        // 'react-native': {
+        //   singleton: true,
+        //   eager: true,
+        //   requiredVersion:
+        //     require('./package.json').dependencies['react-native'],
+        // },
+        // 'react-native-reanimated': {
+        //   singleton: true,
+        //   eager: true,
+        //   requiredVersion:
+        //     require('./package.json').dependencies['react-native-reanimated'],
+        // },
+        // '@callstack/repack/client': {
+        //   singleton: true,
+        //   eager: true,
+        //   requiredVersion:
+        //     require('./package.json').dependencies['@callstack/repack'],
+        // }
       },
     }),
   ],
