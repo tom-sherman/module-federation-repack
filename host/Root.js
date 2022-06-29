@@ -4,11 +4,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ChunkManager } from '@callstack/repack/client';
 import { ReanimatedComponent } from './ReanimatedComponent';
-// import App1 from 'app1/App.js';
-// console.log(App1);
+import App1 from 'app1/App.js';
+
+console.log(App1);
 
 console.log('self.app2', self.app2, self.app1);
-import('app1/App.js').then(mod => console.log('dynamic', mod));
+// import('app1/App.js').then(mod => console.log('dynamic', mod));
 
 async function loadComponent(scope, module) {
   // Initializes the share scope. This fills it with known provided modules from this build and all remotes
@@ -26,7 +27,7 @@ async function loadComponent(scope, module) {
   return exports;
 }
 
-const App2 = React.lazy(() => loadComponent('app2', './App.js'));
+// const App2 = React.lazy(() => loadComponent('app2', './App.js'));
 
 // function App1Wrapper() {
 //   return (
@@ -43,7 +44,7 @@ function App2Wrapper() {
     <React.Suspense
       fallback={<Text style={{ textAlign: 'center' }}>Loading...</Text>}
     >
-      <App2 />
+      {/* <App2 /> */}
     </React.Suspense>
   );
 }
@@ -54,9 +55,10 @@ export default function Root() {
   return (
     <NavigationContainer>
       <ReanimatedComponent backgroundColor="red" />
-      <Tab.Navigator initialRouteName="App1">
+      <Tab.Navigator initialRouteName="Empty">
+        <Tab.Screen name="Empty" component={() => null} />
         {/* <Tab.Screen name="App1" component={App1Wrapper} /> */}
-        <Tab.Screen name="App2" component={App2Wrapper} />
+        {/* <Tab.Screen name="App2" component={App2Wrapper} /> */}
       </Tab.Navigator>
     </NavigationContainer>
   );

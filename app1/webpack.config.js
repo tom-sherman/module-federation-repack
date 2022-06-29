@@ -317,8 +317,9 @@ module.exports = {
         },
         'react-native': {
           singleton: true,
-          eager: STANDALONE, // to be figured out
+          // eager: STANDALONE, // to be figured out
           requiredVersion: '^0.65.0',
+          import: false
         },
         'react-native-reanimated': {
           singleton: true,

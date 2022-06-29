@@ -305,22 +305,28 @@ module.exports = {
       },
       remoteType: 'self',
       remotes: {
-        'app1': `promise new Promise(res => {
-          // __repack__.loadChunk('theChunkIdHere')
-          console.log('__repack__.loadChunk', __repack__.loadChunk)
-          console.log('share scope in pnp',self.__webpack_share_scopes__)
-          res(self.app1)
-        })`,
+        'app1': `external { get: (arg) => {
+          // TODO: We should only do init once
+          console.log('__repack__.hostShareScope', __repack__.hostShareScope)
+          console.log('__repack__.app1.init', __repack__.app1)
+          return Promise.resolve(__repack__.app1.init(__repack__.hostShareScope)).then(() => {
+            console.log('__repack__.app1.get', __repack__.app1)
+            return __repack__.app1.get(arg)
+          })
+          .catch(() => {
+            console.log('__repack__.app1.get catch', __repack__.app1)
+            return __repack__.app1.get(arg)
+          })
+          .then(res => {
+            console.log('===res', res)
+            return () => res()
+          })
+         }, init: (arg) => {
+          __repack__.hostShareScope = arg;
+          } }`,
         'app2': 'app2',
       },
-      exposes: {
-        "./even": "is-even"
-      },
       shared: {
-        "is-even": {
-          singleton: true,
-          eager: true
-        },
         // react: {
         //   singleton: true,
         //   eager: true,
@@ -331,12 +337,12 @@ module.exports = {
         //   requiredVersion:
         //     require('./package.json').dependencies['react-native'],
         // },
-        // 'react-native-reanimated': {
-        //   singleton: true,
-        //   eager: true,
-        //   requiredVersion:
-        //     require('./package.json').dependencies['react-native-reanimated'],
-        // },
+        'react-native-reanimated': {
+          singleton: true,
+          eager: true,
+          requiredVersion:
+            require('./package.json').dependencies['react-native-reanimated'],
+        },
         // '@callstack/repack/client': {
         //   singleton: true,
         //   eager: true,
