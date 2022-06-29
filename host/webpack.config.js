@@ -305,25 +305,31 @@ module.exports = {
       },
       remoteType: 'self',
       remotes: {
-        'app1': `external { get: (arg) => {
-          // TODO: We should only do init once
-          console.log('__repack__.hostShareScope', __repack__.hostShareScope)
-          console.log('__repack__.app1.init', __repack__.app1)
-          return Promise.resolve(__repack__.app1.init(__repack__.hostShareScope)).then(() => {
-            console.log('__repack__.app1.get', __repack__.app1)
-            return __repack__.app1.get(arg)
-          })
-          .catch(() => {
-            console.log('__repack__.app1.get catch', __repack__.app1)
-            return __repack__.app1.get(arg)
-          })
-          .then(res => {
-            console.log('===res', res)
-            return () => res()
-          })
-         }, init: (arg) => {
-          __repack__.hostShareScope = arg;
-          } }`,
+        'app1': `external {
+          get: (arg) => {
+            // TODO: We should only do init once
+            console.log('get...')
+            console.log("__repack__.hostShareScope", JSON.stringify(__repack__.hostShareScope));
+            console.log("self.app1.init", self.app1);
+            return Promise.resolve().then(() => self.app1.init(__repack__.hostShareScope))
+            .then(() => {
+              console.log("self.app1.get", self.app1);
+              return self.app1.get(arg);
+            })
+            .then((res) => {
+              console.log("===res", res);
+              return () => res();
+            })
+            .catch((err) => {
+              console.log("self.app1.get catch", err);
+            })
+          },
+          init: (arg) => {
+            return self.__ChunkManager.loadChunk('app1', 'main').then(() => {
+              __repack__.hostShareScope = arg;
+            })
+          },
+        }`,
         'app2': 'app2',
       },
       shared: {

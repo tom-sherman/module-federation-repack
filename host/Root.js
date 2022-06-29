@@ -55,8 +55,8 @@ export default function Root() {
   return (
     <NavigationContainer>
       <ReanimatedComponent backgroundColor="red" />
-      <Tab.Navigator initialRouteName="Empty">
-        <Tab.Screen name="Empty" component={() => null} />
+      <Tab.Navigator initialRouteName="App1">
+        <Tab.Screen name="App1" component={App1} />
         {/* <Tab.Screen name="App1" component={App1Wrapper} /> */}
         {/* <Tab.Screen name="App2" component={App2Wrapper} /> */}
       </Tab.Navigator>

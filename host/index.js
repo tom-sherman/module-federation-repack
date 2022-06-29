@@ -2,6 +2,7 @@ console.log("index.js")
 import { AppRegistry, Platform } from 'react-native';
 import { name as appName } from './app.json';
 import { ChunkManager } from '@callstack/repack/client';
+self.__ChunkManager = ChunkManager
 
 if(!__webpack_share_scopes__.default) {
    __webpack_init_sharing__('default');
