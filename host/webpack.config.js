@@ -308,10 +308,12 @@ module.exports = {
         'app1': `external {
           get: (arg) => {
             // TODO: We should only do init once
-            console.log('get...')
-            console.log("__repack__.hostShareScope", JSON.stringify(__repack__.hostShareScope));
-            console.log("self.app1.init", self.app1);
-            return Promise.resolve().then(() => self.app1.init(__repack__.hostShareScope))
+            console.log('get...', self.app1)
+            return __repack__.__ChunkManager.loadChunk('app1', 'main')
+            .then(() => {
+              console.log('=self.app1.init', __repack__.hostShareScope)
+              return self.app1.init(__repack__.hostShareScope)
+            })
             .then(() => {
               console.log("self.app1.get", self.app1);
               return self.app1.get(arg);
@@ -325,18 +327,16 @@ module.exports = {
             })
           },
           init: (arg) => {
-            return self.__ChunkManager.loadChunk('app1', 'main').then(() => {
-              __repack__.hostShareScope = arg;
-            })
+            __repack__.hostShareScope = arg;
           },
         }`,
         'app2': 'app2',
       },
       shared: {
-        // react: {
-        //   singleton: true,
-        //   eager: true,
-        // },
+        react: {
+          singleton: true,
+          eager: true,
+        },
         // 'react-native': {
         //   singleton: true,
         //   eager: true,
@@ -349,12 +349,12 @@ module.exports = {
           requiredVersion:
             require('./package.json').dependencies['react-native-reanimated'],
         },
-        // '@callstack/repack/client': {
-        //   singleton: true,
-        //   eager: true,
-        //   requiredVersion:
-        //     require('./package.json').dependencies['@callstack/repack'],
-        // }
+        '@callstack/repack/client': {
+          singleton: true,
+          eager: true,
+          requiredVersion:
+            require('./package.json').dependencies['@callstack/repack'],
+        }
       },
     }),
   ],
