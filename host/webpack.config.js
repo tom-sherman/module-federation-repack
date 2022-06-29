@@ -337,12 +337,12 @@ module.exports = {
           singleton: true,
           eager: true,
         },
-        // 'react-native': {
-        //   singleton: true,
-        //   eager: true,
-        //   requiredVersion:
-        //     require('./package.json').dependencies['react-native'],
-        // },
+        'react-native': {
+          singleton: true,
+          eager: true,
+          requiredVersion:
+            require('./package.json').dependencies['react-native'],
+        },
         'react-native-reanimated': {
           singleton: true,
           eager: true,

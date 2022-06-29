@@ -7,18 +7,6 @@ __repack__.__ChunkManager = ChunkManager
 if(!__webpack_share_scopes__.default) {
    __webpack_init_sharing__('default');
 }
-self.__webpack_share_scopes__ = Object.assign(
-  __webpack_share_scopes__.default,
-  {
-    'react-native': {
-      "0.65.1": {
-      loaded: true,
-      get: () => () => require("react-native"),
-    }
-  }
-  }
-);
-
 
 console.log('__webpack_share_scopes__', __webpack_share_scopes__);
 ChunkManager.configure({
