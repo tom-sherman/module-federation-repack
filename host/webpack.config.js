@@ -1,8 +1,8 @@
-const path = require('path');
-const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
-const ReactNative = require('@callstack/repack');
-const { ModuleFederationPlugin } = require('webpack').container;
+const path = require("path");
+const webpack = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
+const ReactNative = require("@callstack/repack");
+const { ModuleFederationPlugin } = require("webpack").container;
 
 /**
  * More documentation, installation, usage, motivation and differences with Metro is available at:
@@ -32,8 +32,8 @@ const { ModuleFederationPlugin } = require('webpack').container;
  * to specify your values, if the defaults don't suit your project.
  */
 
-const mode = ReactNative.getMode({ fallback: 'development' });
-const dev = mode === 'development';
+const mode = ReactNative.getMode({ fallback: "development" });
+const dev = mode === "development";
 const context = ReactNative.getContext();
 const entry = ReactNative.getEntry();
 const platform = ReactNative.getPlatform({ fallback: process.env.PLATFORM });
@@ -41,6 +41,22 @@ const minimize = ReactNative.isMinimizeEnabled({ fallback: !dev });
 const devServer = ReactNative.getDevServerOptions();
 devServer.hmr = false;
 const reactNativePath = ReactNative.getReactNativePath();
+
+const generateChunkBoilerplate = (chunkName) => `external {
+  get: (arg) => {
+    // TODO: We should only do init once
+    return __repack__.__ChunkManager.loadChunk('${chunkName}', 'main')
+    .then(() => self.${chunkName}.init(__repack__.hostShareScope))
+    .then(() => self.${chunkName}.get(arg))
+    .then((res) => () => res())
+    .catch((err) => {
+      console.error("self.${chunkName}.get catch", err);
+    })
+  },
+  init: (arg) => {
+    __repack__.hostShareScope = arg;
+  },
+}`;
 
 /**
  * Depending on your Babel configuration you might want to keep it.
@@ -101,9 +117,9 @@ module.exports = {
    */
   output: {
     clean: true,
-    path: path.join(__dirname, 'build', platform),
-    filename: 'index.bundle',
-    chunkFilename: '[name].chunk.bundle',
+    path: path.join(__dirname, "build", platform),
+    filename: "index.bundle",
+    chunkFilename: "[name].chunk.bundle",
     publicPath: ReactNative.getPublicPath(devServer),
   },
   /**
@@ -148,7 +164,7 @@ module.exports = {
           /node_modules(.*[/\\])+abort-controller/,
           /node_modules(.*[/\\])+@callstack[/\\]repack/,
         ],
-        use: 'babel-loader',
+        use: "babel-loader",
       },
       /**
        * Here you can adjust loader that will process your files.
@@ -160,10 +176,10 @@ module.exports = {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
             /** Add React Refresh transform only when HMR is enabled. */
-            plugins: devServer.hmr ? ['module:react-refresh/babel'] : undefined,
+            plugins: devServer.hmr ? ["module:react-refresh/babel"] : undefined,
           },
         },
       },
@@ -182,7 +198,7 @@ module.exports = {
           ReactNative.ASSET_EXTENSIONS
         ),
         use: {
-          loader: '@callstack/repack/assets-loader',
+          loader: "@callstack/repack/assets-loader",
           options: {
             platform,
             devServerEnabled: devServer.enabled,
@@ -252,9 +268,9 @@ module.exports = {
     new webpack.SourceMapDevToolPlugin({
       test: /\.(js)?bundle$/,
       exclude: /\.chunk\.(js)?bundle$/,
-      filename: '[file].map',
+      filename: "[file].map",
       append: `//# sourceMappingURL=[url]?platform=${platform}`,
-      moduleFilenameTemplate: 'webpack://host/[resource-path]?[loaders]',
+      moduleFilenameTemplate: "webpack://host/[resource-path]?[loaders]",
       /**
        * Uncomment for faster builds but less accurate Source Maps
        */
@@ -270,9 +286,9 @@ module.exports = {
     new webpack.SourceMapDevToolPlugin({
       test: /\.(js)?bundle$/,
       include: /\.chunk\.(js)?bundle$/,
-      filename: '[file].map',
+      filename: "[file].map",
       append: `//# sourceMappingURL=[url]?platform=${platform}`,
-      moduleFilenameTemplate: 'webpack://host/[resource-path]?[loaders]',
+      moduleFilenameTemplate: "webpack://host/[resource-path]?[loaders]",
       /**
        * Uncomment for faster builds but less accurate Source Maps
        */
@@ -298,63 +314,39 @@ module.exports = {
     }),
 
     new ModuleFederationPlugin({
-      name: 'host',
+      name: "host",
       library: {
-        name: 'host',
-        type: 'self'
+        name: "host",
+        type: "self",
       },
-      remoteType: 'self',
+      remoteType: "self",
       remotes: {
-        'app1': `external {
-          get: (arg) => {
-            // TODO: We should only do init once
-            console.log('get...', self.app1)
-            return __repack__.__ChunkManager.loadChunk('app1', 'main')
-            .then(() => {
-              console.log('=self.app1.init', __repack__.hostShareScope)
-              return self.app1.init(__repack__.hostShareScope)
-            })
-            .then(() => {
-              console.log("self.app1.get", self.app1);
-              return self.app1.get(arg);
-            })
-            .then((res) => {
-              console.log("===res", res);
-              return () => res();
-            })
-            .catch((err) => {
-              console.log("self.app1.get catch", err);
-            })
-          },
-          init: (arg) => {
-            __repack__.hostShareScope = arg;
-          },
-        }`,
-        'app2': 'app2',
+        app1: generateChunkBoilerplate("app1"),
+        app2: generateChunkBoilerplate("app2"),
       },
       shared: {
         react: {
           singleton: true,
           eager: true,
         },
-        'react-native': {
+        "react-native": {
           singleton: true,
           eager: true,
           requiredVersion:
-            require('./package.json').dependencies['react-native'],
+            require("./package.json").dependencies["react-native"],
         },
-        'react-native-reanimated': {
+        "react-native-reanimated": {
           singleton: true,
           eager: true,
           requiredVersion:
-            require('./package.json').dependencies['react-native-reanimated'],
+            require("./package.json").dependencies["react-native-reanimated"],
         },
-        '@callstack/repack/client': {
+        "@callstack/repack/client": {
           singleton: true,
           eager: true,
           requiredVersion:
-            require('./package.json').dependencies['@callstack/repack'],
-        }
+            require("./package.json").dependencies["@callstack/repack"],
+        },
       },
     }),
   ],

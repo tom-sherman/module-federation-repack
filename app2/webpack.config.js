@@ -1,7 +1,7 @@
-const path = require('path');
-const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
-const ReactNative = require('@callstack/repack');
+const path = require("path");
+const webpack = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
+const ReactNative = require("@callstack/repack");
 const { ModuleFederationPlugin } = require("webpack").container;
 
 const STANDALONE = Boolean(process.env.STANDALONE);
@@ -34,8 +34,8 @@ const STANDALONE = Boolean(process.env.STANDALONE);
  * to specify your values, if the defaults don't suit your project.
  */
 
-const mode = ReactNative.getMode({ fallback: 'development' });
-const dev = mode === 'development';
+const mode = ReactNative.getMode({ fallback: "development" });
+const dev = mode === "development";
 const context = ReactNative.getContext();
 const entry = ReactNative.getEntry();
 const platform = ReactNative.getPlatform({ fallback: process.env.PLATFORM });
@@ -103,9 +103,9 @@ module.exports = {
    */
   output: {
     clean: true,
-    path: path.join(__dirname, 'build', platform),
-    filename: 'index.bundle',
-    chunkFilename: '[name].chunk.bundle',
+    path: path.join(__dirname, "build", platform),
+    filename: "index.bundle",
+    chunkFilename: "[name].chunk.bundle",
     publicPath: ReactNative.getPublicPath(devServer),
   },
   /**
@@ -150,7 +150,7 @@ module.exports = {
           /node_modules(.*[/\\])+abort-controller/,
           /node_modules(.*[/\\])+@callstack[/\\]repack/,
         ],
-        use: 'babel-loader',
+        use: "babel-loader",
       },
       /**
        * Here you can adjust loader that will process your files.
@@ -162,10 +162,10 @@ module.exports = {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
             /** Add React Refresh transform only when HMR is enabled. */
-            plugins: devServer.hmr ? ['module:react-refresh/babel'] : undefined,
+            plugins: devServer.hmr ? ["module:react-refresh/babel"] : undefined,
           },
         },
       },
@@ -184,7 +184,7 @@ module.exports = {
           ReactNative.ASSET_EXTENSIONS
         ),
         use: {
-          loader: '@callstack/repack/assets-loader',
+          loader: "@callstack/repack/assets-loader",
           options: {
             platform,
             devServerEnabled: devServer.enabled,
@@ -254,9 +254,9 @@ module.exports = {
     new webpack.SourceMapDevToolPlugin({
       test: /\.(js)?bundle$/,
       exclude: /\.chunk\.(js)?bundle$/,
-      filename: '[file].map',
+      filename: "[file].map",
       append: `//# sourceMappingURL=[url]?platform=${platform}`,
-      moduleFilenameTemplate: 'webpack://app2/[resource-path]?[loaders]',
+      moduleFilenameTemplate: "webpack://app2/[resource-path]?[loaders]",
       /**
        * Uncomment for faster builds but less accurate Source Maps
        */
@@ -272,9 +272,9 @@ module.exports = {
     new webpack.SourceMapDevToolPlugin({
       test: /\.(js)?bundle$/,
       include: /\.chunk\.(js)?bundle$/,
-      filename: '[file].map',
+      filename: "[file].map",
       append: `//# sourceMappingURL=[url]?platform=${platform}`,
-      moduleFilenameTemplate: 'webpack://app2/[resource-path]?[loaders]',
+      moduleFilenameTemplate: "webpack://app2/[resource-path]?[loaders]",
       /**
        * Uncomment for faster builds but less accurate Source Maps
        */
@@ -303,22 +303,22 @@ module.exports = {
       name: "app2",
       filename: `app2.container.bundle`,
       library: {
-        name: 'app2',
-        type: 'self',
+        name: "app2",
+        type: "self",
       },
       exposes: {
         "./App.js": "./src/App.js",
-        "./FederatedText.js": './src/FederatedText.js',
+        "./FederatedText.js": "./src/FederatedText.js",
       },
       shared: {
         react: {
-          singleton: true ,
+          singleton: true,
           eager: STANDALONE, // to be figured out
         },
         "react-native": {
           singleton: true,
-          eager: STANDALONE, // to be figured out
-          requiredVersion: '^0.65.0'
+          // eager: STANDALONE, // to be figured out
+          requiredVersion: "^0.65.0",
         },
       },
     }),
