@@ -42,15 +42,15 @@ const devServer = ReactNative.getDevServerOptions();
 devServer.hmr = false;
 const reactNativePath = ReactNative.getReactNativePath();
 
-const generateChunkBoilerplate = (moduleName) => `external {
+const generateChunkBoilerplate = (chunkName) => `external {
   get: (arg) => {
     // TODO: We should only do init once
-    return __repack__.__ChunkManager.loadChunk('${moduleName}', 'main')
-    .then(() => self.${moduleName}.init(__repack__.hostShareScope))
-    .then(() => self.${moduleName}.get(arg))
+    return __repack__.__ChunkManager.loadChunk('${chunkName}', 'main')
+    .then(() => self.${chunkName}.init(__repack__.hostShareScope))
+    .then(() => self.${chunkName}.get(arg))
     .then((res) => () => res())
     .catch((err) => {
-      console.error("self.${moduleName}.get catch", err);
+      console.error("self.${chunkName}.get catch", err);
     })
   },
   init: (arg) => {
