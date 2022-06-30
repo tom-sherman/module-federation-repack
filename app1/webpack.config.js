@@ -44,6 +44,22 @@ const devServer = ReactNative.getDevServerOptions();
 devServer.hmr = STANDALONE ? devServer.hmr : false;
 const reactNativePath = ReactNative.getReactNativePath();
 
+const generateChunkBoilerplate = (chunkName) => `external {
+  get: (arg) => {
+    // TODO: We should only do init once
+    return __repack__.__ChunkManager.loadChunk('${chunkName}', 'main')
+    .then(() => self.${chunkName}.init(__repack__.hostShareScope))
+    .then(() => self.${chunkName}.get(arg))
+    .then((res) => () => res())
+    .catch((err) => {
+      console.error("self.${chunkName}.get catch", err);
+    })
+  },
+  init: (arg) => {
+    __repack__.hostShareScope = arg;
+  },
+}`;
+
 /**
  * Depending on your Babel configuration you might want to keep it.
  * If you don't use `env` in your Babel config, you can remove it.
@@ -309,6 +325,9 @@ module.exports = {
       },
       exposes: {
         './App.js': './src/App.js',
+      },
+      remotes: {
+        "app2": generateChunkBoilerplate("app2")
       },
       shared: {
         react: {

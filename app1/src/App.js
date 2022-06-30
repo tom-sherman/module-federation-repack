@@ -10,24 +10,9 @@ import {
 
 import { Colors, Header } from 'react-native/Libraries/NewAppScreen';
 import { ReanimatedComponent } from './ReanimatedComponent';
-import {ChunkManager} from '@callstack/repack/client';
 
-// async function loadComponent(scope, module) {
-//   // Initializes the share scope. This fills it with known provided modules from this build and all remotes
-//   await __webpack_init_sharing__('default');
-//   // Download and execute container
-//   await ChunkManager.loadChunk(scope, 'main');
-
-//   const container = self[scope];
-
-//   // Initialize the container, it may provide shared modules
-//   await container.init(__webpack_share_scopes__.default);
-//   const factory = await container.get(module);
-//   const exports = factory();
-//   return exports;
-// }
-
-// const FederatedText = React.lazy(() => loadComponent('app2', './FederatedText.js'));
+// import FederatedText from "app2/FederatedText.js"; // Sync import also works
+const FederatedText = React.lazy(() => import('app2/FederatedText.js'));
 
 const Section = ({ children, title }) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -77,7 +62,9 @@ export default function App() {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}
         >
-          {/* <FederatedText style={{color: 'black'}}>Hello</FederatedText> */}
+          <React.Suspense fallback={<Text>Loading from app2...</Text>}>
+            <FederatedText style={{color: 'black'}}>Hello</FederatedText>
+          </React.Suspense>
           <Section title="App 1">
             This screen comes from <Text style={styles.highlight}>app1</Text>{' '}
             container.
