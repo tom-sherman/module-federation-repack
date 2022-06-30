@@ -1,22 +1,18 @@
-import * as React from 'react';
-import { AppRegistry, Text, Platform, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ChunkManager } from '@callstack/repack/client';
-import { ReanimatedComponent } from './ReanimatedComponent';
-import App1 from 'app1/App.js';
-
-console.log(App1);
-
-console.log('self.app2', self.app2, self.app1);
-// import('app1/App.js').then(mod => console.log('dynamic', mod));
+import * as React from "react";
+import { Text } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ChunkManager } from "@callstack/repack/client";
+import { ReanimatedComponent } from "./ReanimatedComponent";
+import App1 from "app1/App.js";
+import App2 from "app2/App.js";
 
 async function loadComponent(scope, module) {
   // Initializes the share scope. This fills it with known provided modules from this build and all remotes
-  await __webpack_init_sharing__('default');
+  await __webpack_init_sharing__("default");
   // Download and execute container
   // Query Reg here to resolve the semver range to a specific version and get a unique scope for that version
-  await ChunkManager.loadChunk(scope, 'main');
+  await ChunkManager.loadChunk(scope, "main");
 
   const container = self[scope];
 
@@ -27,24 +23,22 @@ async function loadComponent(scope, module) {
   return exports;
 }
 
-// const App2 = React.lazy(() => loadComponent('app2', './App.js'));
-
-// function App1Wrapper() {
-//   return (
-//     <React.Suspense
-//       fallback={<Text style={{ textAlign: 'center' }}>Loading...</Text>}
-//     >
-//       <App1 />
-//     </React.Suspense>
-//   );
-// }
+function App1Wrapper() {
+  return (
+    <React.Suspense
+      fallback={<Text style={{ textAlign: "center" }}>Loading...</Text>}
+    >
+      <App1 />
+    </React.Suspense>
+  );
+}
 
 function App2Wrapper() {
   return (
     <React.Suspense
-      fallback={<Text style={{ textAlign: 'center' }}>Loading...</Text>}
+      fallback={<Text style={{ textAlign: "center" }}>Loading...</Text>}
     >
-      {/* <App2 /> */}
+      <App2 />
     </React.Suspense>
   );
 }
@@ -56,9 +50,8 @@ export default function Root() {
     <NavigationContainer>
       <ReanimatedComponent backgroundColor="red" />
       <Tab.Navigator initialRouteName="App1">
-        <Tab.Screen name="App1" component={App1} />
-        {/* <Tab.Screen name="App1" component={App1Wrapper} /> */}
-        {/* <Tab.Screen name="App2" component={App2Wrapper} /> */}
+        <Tab.Screen name="App1" component={App1Wrapper} />
+        <Tab.Screen name="App2" component={App2Wrapper} />
       </Tab.Navigator>
     </NavigationContainer>
   );

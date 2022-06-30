@@ -1,10 +1,11 @@
-import * as React from 'react';
-console.log("bootstrap.js");
+import * as React from "react";
 
-const Root = React.lazy(() => import('./Root'));
+const Root = React.lazy(() => import("./Root"));
 
 export default function Bootstrap() {
-  return <React.Suspense fallback={null}>
-    <Root />
-  </React.Suspense>
+  return (
+    <React.Suspense fallback={null}>
+      <Root />
+    </React.Suspense>
+  );
 }
