@@ -119,7 +119,7 @@ module.exports = {
     clean: true,
     path: path.join(__dirname, "build", platform),
     filename: "index.bundle",
-    chunkFilename: "[name].chunk.bundle",
+    chunkFilename: "[name]-[contenthash].chunk.bundle",
     publicPath: ReactNative.getPublicPath(devServer),
   },
   /**
