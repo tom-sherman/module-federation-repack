@@ -31,6 +31,13 @@ Or as part of a Host application.
 3. Run dev server for host application: `yarn --cwd host start`
 4. Build host application: `yarn --cwd host ios`/`yarn --cwd host android`
 
+## OR
+
+1. run apps and redirect `yarn start:apps`
+2. run host and android `yarn start`
+
+redirect works only in android
+
 ### Notes
 
 It might be helpful to open Re.Pack's web dashboard to analyse artifacts:

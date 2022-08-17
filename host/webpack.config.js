@@ -147,6 +147,7 @@ module.exports = {
           /node_modules(.*[/\\])+metro/,
           /node_modules(.*[/\\])+abort-controller/,
           /node_modules(.*[/\\])+@callstack[/\\]repack/,
+          /node_modules(.*[/\\])+@react-native-async-storage[/\\]async-storage/,
         ],
         use: 'babel-loader',
       },
@@ -316,6 +317,12 @@ module.exports = {
           requiredVersion:
             require('./package.json').dependencies['react-native-reanimated'],
         },
+        "@react-native-async-storage/async-storage": {
+          singleton: true,
+          eager: true,
+          requiredVersion:
+            require("./package.json").dependencies["@react-native-async-storage/async-storage"],
+        }
       },
     }),
   ],

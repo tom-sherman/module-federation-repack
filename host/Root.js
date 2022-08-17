@@ -1,33 +1,40 @@
 import * as React from 'react';
-import { AppRegistry, Text, Platform, View } from 'react-native';
+import { Text, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ChunkManager } from '@callstack/repack/client';
 import { ReanimatedComponent } from './ReanimatedComponent';
 
+
+const HOST = Platform.OS === 'android' ? '10.0.2.2' : 'localhost'
+
 ChunkManager.configure({
   forceRemoteChunkResolution: true,
+  storage: AsyncStorage,
   resolveRemoteChunk: async (chunkId, parentId) => {
     let url;
 
     switch (parentId) {
       case 'app1':
-        url = `http://localhost:9000/${chunkId}.chunk.bundle`;
+        url = `http://${HOST}:3000/${chunkId}.chunk.bundle`;
         break;
       case 'app2':
-        url = `http://localhost:9001/${chunkId}.chunk.bundle`;
+        url = `http://${HOST}:9001/${chunkId}.chunk.bundle`;
         break;
       case 'main':
       default:
         url =
           {
             // containers
-            app1: 'http://localhost:9000/app1.container.bundle',
-            app2: 'http://localhost:9001/app2.container.bundle',
-          }[chunkId] ?? `http://localhost:8081/${chunkId}.chunk.bundle`;
+            app1: `http://${HOST}:3000/app1.container.bundle`,
+            app2: `http://${HOST}:9001/app2.container.bundle`,
+          }[chunkId] ?? `http://${HOST}:8081/${chunkId}.chunk.bundle`;
         break;
     }
-
+    console.log('resolveRemoteChunk', {
+      chunkId, parentId, url
+    })
     return {
       url,
       query: {
