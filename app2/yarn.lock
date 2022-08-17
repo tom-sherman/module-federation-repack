@@ -684,10 +684,10 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
-"@callstack/repack@2.5.1":
-  version "2.5.1"
-  resolved "https://registry.npmjs.org/@callstack/repack/-/repack-2.5.1.tgz#9306803b9f51194eda21a9812cec1ac555b40f4f"
-  integrity sha512-+Bmv3szAminlNxek3j8gKhkc9moUczuqE5IvnnLl6c58mAnisOTkR4YXMUbRm8twFiprhkrYUy+uDJnMzu+11Q==
+"@callstack/repack@2.5.2":
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/@callstack/repack/-/repack-2.5.2.tgz#3183414199c30d7640857855346f52583216b41a"
+  integrity sha512-b1vVBOnmr+vWmwU9WrSDafHu9N0PMREcBhSQJL1ohm8lv8sz9Rtv7e00vJvdTKOBcpQ5+cHw0jCEJ1h08/Xc6g==
   dependencies:
     "@babel/code-frame" "^7.12.13"
     "@pmmmwh/react-refresh-webpack-plugin" "^0.4.3"
