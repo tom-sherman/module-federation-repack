@@ -1,0 +1,19 @@
+{
+  "name": "module-federation-repack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:tom-sherman/module-federation-repack.git",
+  "author": "PetroPavlenko <petebig182@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start:app1": "yarn --cwd app1 start",
+    "start:app2": "yarn --cwd app2 start",
+    "start:redirect": "yarn --cwd redirect start",
+    "start:host": "yarn --cwd host start",
+    "start:apps": "concurrently -k --raw 'yarn start:app1' 'yarn start:app2' 'yarn start:redirect'",
+    "start": "concurrently --raw 'yarn start:host' 'yarn --cwd host android'"
+  },
+  "dependencies": {
+    "concurrently": "^7.3.0"
+  }
+}
