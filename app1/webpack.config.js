@@ -160,6 +160,7 @@ module.exports = {
           /node_modules(.*[/\\])+@react-native/,
           /node_modules(.*[/\\])+@react-navigation/,
           /node_modules(.*[/\\])+@react-native-community/,
+          /node_modules(.*[/\\])+@react-native-async-storage[/\\]async-storage/,
           /node_modules(.*[/\\])+@expo/,
           /node_modules(.*[/\\])+pretty-format/,
           /node_modules(.*[/\\])+metro/,
@@ -350,6 +351,12 @@ module.exports = {
           eager: true,
           requiredVersion:
             require('./package.json').dependencies['@callstack/repack'],
+        },
+        "@react-native-async-storage/async-storage": {
+          singleton: true,
+          eager: true,
+          requiredVersion:
+            require("./package.json").dependencies["@react-native-async-storage/async-storage"],
         }
       },
     }),
